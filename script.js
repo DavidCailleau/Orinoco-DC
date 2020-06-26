@@ -193,11 +193,14 @@ panierCreation = () => {
     recapPrixUnitaire.textContent = "Prix";
     recapRemove.textContent = "Annuler ?";
 
-    //Incrémentation de l'id des lignes pour chaque produit
-    let i = 0;
+  
+    
+ //Boucle FOR pour affichage des articles dans le panier
+     
+    for (let i = 0; i<panier.length; i++) {
+    
+      //Création des lignes du tableau
 
-    panier.forEach((article) => {
-      //Création de la ligne
       let ligneArticle = document.createElement("tr");
       let photoArticle = document.createElement("img");
       let nomArticle = document.createElement("td");
@@ -205,21 +208,27 @@ panierCreation = () => {
       let supprimerArticle = document.createElement("td");
       let removeArticle = document.createElement("i");
 
-      //Attribution des class pour le css
-      ligneArticle.setAttribute("id", "article" + i);
+      //Attribution des class ou Id
+      ligneArticle.setAttribute("id", "article" + [i]);
       photoArticle.setAttribute("class", "photo_article");
-      photoArticle.setAttribute("src", article.imageUrl);
+      photoArticle.setAttribute("src", panier[i].imageUrl);
       photoArticle.setAttribute("alt", "Photo de l'article commandé");
-      removeArticle.setAttribute("id", "remove" + i);
+      removeArticle.setAttribute("id", "remove" + [i]);
       removeArticle.setAttribute("class", "fas fa-times-circle fa-1x");
       removeArticle.setAttribute("title", "Supprimer article ?");
 
-      //bind permet de garder l'incrementation du i qui représente l'index du panier
+      console.log(i);
+      
+      
 
-      removeArticle.addEventListener("click", annulerArticle.bind(i));
-      i++;
 
-      //Insertion dans le HTML
+//Supprimer un produit du panier
+   removeArticle.addEventListener("click", (event) => {this.annulerArticle(i);})
+   
+        
+      
+
+      //Agencement de la structure HTML
       recap.appendChild(ligneArticle);
       ligneArticle.appendChild(photoArticle);
       ligneArticle.appendChild(nomArticle);
@@ -227,12 +236,15 @@ panierCreation = () => {
       ligneArticle.appendChild(supprimerArticle);
       supprimerArticle.appendChild(removeArticle);
 
-      //Contenu des lignes
+      //Contenu de chaque ligne
 
-      nomArticle.textContent = article.name;
-      prixUnitArticle.textContent = article.price / 100 + " €";
-      console.log(article.name);
-    });
+      nomArticle.textContent = panier[i].name;
+      prixUnitArticle.textContent = panier[i].price / 100 + " €";
+      console.log(panier[i].name);
+      
+
+    };
+
 
     //Dernière ligne du tableau : Total
     recap.appendChild(ligneTotal);
@@ -248,8 +260,8 @@ panierCreation = () => {
 
     //Calcule de l'addition total
     let sommeTotal = 0;
-    JSON.parse(localStorage.getItem("panier")).forEach((article) => {
-      sommeTotal += article.price / 100;
+    panier.forEach((panier) => {
+      sommeTotal += panier.price / 100;
     });
 
     //Affichage du prix total à payer dans l'addition
@@ -258,15 +270,16 @@ panierCreation = () => {
   }
 };
 
-//Supprimer un produit du panier
+
+
 annulerArticle = (i) => {
-  panier.splice(i, 1);
+ panier.splice(i, 1);
   localStorage.clear();
-  // Mise à jour du nouveau panier avec l'article en moins
+  // Mise à jour du nouveau panier avec suppression de l'article
   localStorage.setItem("panier", JSON.stringify(panier));
-  //Mise à jour de la page
+  //Mise à jour de la page pour affichage de la suppression au client
   window.location.reload();
-};
+};  
 
 //---------------------------FORMULAIRE----------------//
 
@@ -331,7 +344,7 @@ checkInput = () => {
   } else {
     console.log("Ville acceptée");
   }
-  //Si un des champs n'est pas bon => message d'alert avec la raison
+  //Si un des champs n'est pas conforme => message d'alert avec la raison
   if (checkMessage != "") {
     alert("Il est nécessaire de :" + "\n" + checkMessage);
   }
@@ -352,14 +365,8 @@ checkInput = () => {
 checkPanier = () => {
   //Vérifier qu'il y ai au moins un produit dans le panier
   let etatPanier = JSON.parse(localStorage.getItem("panier"));
-  //Si le panier est vide ou null (suppression localStorage par)=>alerte
-  if (etatPanier == null) {
-    //Si l'utilisateur à supprimer son localStorage etatPanier sur la page basket.html et qu'il continue le process de commande
-    alert(
-      "Il y a eu un problème avec votre panier. Veuillez recharger la page"
-    );
-    return false;
-  } else if (etatPanier.length < 1 || etatPanier == null) {
+  //Si le panier est vide ou null
+  if  (etatPanier.length < 1 || etatPanier == null) {
     alert("Votre panier est vide");
     return false;
   } else {
@@ -368,7 +375,7 @@ checkPanier = () => {
   }
 };
 
-/*Lien pour envoi à l'API */
+/*Envoi à l'API */
 //Tableau et objet demandé par l'API pour la commande
 let contact;
 let products = [];
@@ -396,11 +403,10 @@ const envoiFormulaire = (sendForm, url) => {
 confirmCommande = () => {
   let commander = document.getElementById("form_1");
   commander.addEventListener("submit", (event) => {
-    event.preventDefault();
+    event.preventDefault()
+    //Si le panier n'est pas vide et que le formulaire est valie => Construction du tableau products envoyé à l'API
     if (checkPanier() == true && checkInput() != null) {
       console.log("L'envoi peut etre fait");
-
-      //Si le panier n'est pas vide et que le formulaire est valie => Construction du tableau products envoyé à l'API
       panier.forEach((article) => {
         products.push(article._id);
       });
@@ -416,7 +422,7 @@ confirmCommande = () => {
       envoiFormulaire(sendForm, url);
       console.log(commande);
 
-      //Une fois la commande faite retour à l'état initial des tableaux/objet/localStorage
+      //Une fois la commande effectuée retour à l'état initial des tableaux/objet/localStorage
       contact = {};
       products = [];
       localStorage.clear();
@@ -426,6 +432,7 @@ confirmCommande = () => {
   });
 };
 
+//Récupération des informations pour affichage sur la page de confirmation
 retourOrder = () => {
   if (sessionStorage.getItem("order") != null) {
     let order = JSON.parse(sessionStorage.getItem("order"));
