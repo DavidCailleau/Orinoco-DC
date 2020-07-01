@@ -308,7 +308,7 @@ checkInput = () => {
     checkSpecialCharacter.test(nom) == true ||
     nom == ""
   ) {
-    checkMessage = "Veuillez vérifier ou renseigner votre nom";
+    checkMessage = "Veuillez vérifier les informations concernant votre nom. Les caractères spéciaux ou les chiffres ne sont pas autorisés";
   } else {
     console.log("Nom accepté");
   }
@@ -318,35 +318,35 @@ checkInput = () => {
     checkSpecialCharacter.test(prenom) == true ||
     prenom == ""
   ) {
-    checkMessage = checkMessage + "\n" + "Vérifier/renseigner votre prénom";
+    checkMessage = checkMessage + "\n" + "Veuillez vérifier les informations concernant votre prénom. Les caractères spéciaux ou les chiffres ne sont pas autorisés";
   } else {
     console.log("Prénom accepté");
   }
   //Test du mail
   if (checkMail.test(email) == false) {
-    checkMessage = checkMessage + "\n" + "Vérifier/renseigner votre email";
+    checkMessage = checkMessage + "\n" + "Veuillez vérifier les informations concernant votre email. Les caractères spéciaux ne sont pas autorisés";
   } else {
     console.log("Adresse mail acceptée");
   }
   //Test de l'adresse
   if (checkSpecialCharacter.test(adresse) == true || adresse == "") {
-    checkMessage = checkMessage + "\n" + "Vérifier/renseigner votre adresse";
+    checkMessage = checkMessage + "\n" + "Veuillez vérifier les informations concernant votre adresse postale. Les caractères spéciaux ne sont pas autorisés";
   } else {
     console.log(" Adresse postale acceptée");
   }
   //Test de la ville
   if (
-    (checkSpecialCharacter.test(ville) == true &&
+    (checkSpecialCharacter.test(ville) == true ||
       checkNumber.test(ville) == true) ||
     ville == ""
   ) {
-    checkMessage = checkMessage + "\n" + "Vérifier/renseigner votre ville";
+    checkMessage = checkMessage + "\n" + "Veuillez vérifier les informations concernant votre ville. Les caractères spéciaux ou les chiffres ne sont pas autorisés";
   } else {
     console.log("Ville acceptée");
   }
   //Si un des champs n'est pas conforme => message d'alert avec la raison
   if (checkMessage != "") {
-    alert("Il est nécessaire de :" + "\n" + checkMessage);
+    alert("Attention certaines données ne sont pas conformes :" + "\n" + checkMessage);
   }
   //Si le formulaire est validé => construction de l'objet contact
   else {
