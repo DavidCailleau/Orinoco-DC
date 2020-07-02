@@ -1,15 +1,22 @@
 # P5 - Parcours Developpeur Web OpenClassrooms - Orinoco  #
 
-This is the back end server for Project 5 of the Junior Web Developer path.
+Il s'agit du 5ème projet du parcours de Developpeur Web d'OpenClassrooms.
 
-### Prerequisites ###
+Les compétences évaluées sont :
 
-You will need to have Node and `npm` installed locally on your machine.
+- Valider des données issues de sources externes
+- Gérer des événements JavaScript
+- Créer un plan de test pour une application
+- Interagir avec un web service avec JavaScript
+
+
+### Prérequis ###
+
+Vous avez besoin d'avoir Node et `npm` installé localement sur votre machine.
 
 ### Installation ###
 
-Clone this repo. From within the project folder, run `npm install`. You 
-can then run the server with `node server`. 
-The server should run on `localhost` with default port `3000`. If the
-server runs on another port for any reason, this is printed to the
-console when the server starts, e.g. `Listening on port 3001`.
+Clonez le repository.
+Lancez `npm install` dans votre console.
+Puis lancez `node server` pour lancer le serveur.
+Le serveur tourne par défaut en `localhost` avec le port `3000`
